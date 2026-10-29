@@ -10,7 +10,7 @@ from . import runtime, theme
 from .runtime import scaled
 from .theme import ACCENT_BUTTON_STYLE, apply_titlebar_theme, register_themed_widget
 from .widgets import bind_context_menu, bind_tab_navigation, center_window
-from .. import config
+from .. import browser_login, config
 from ..auth import format_token_json
 
 ACCESS_TOKEN_LOGIN_URL = "https://auth.smartedu.cn/uias/login"
@@ -50,11 +50,60 @@ def show_access_token_window() -> None: # 打开输入 Access Token 的窗口
     frame.pack(fill="both", expand=True)
 
     # 提示文本
-    label = ttk.Label(frame, text="请粘贴从浏览器获取的登录凭据", style="Heading.TLabel")
+    label = ttk.Label(frame, text="获取登录凭据", style="Heading.TLabel")
     label.pack(anchor="w")
+
+    # 方式一：自动登录（打开内置登录窗口，登录成功后自动填入并保存）
+    def open_browser_login() -> None:
+        if not browser_login.is_available():
+            messagebox.showerror(
+                "无法打开登录窗口",
+                "内置登录窗口需要 pywebview 支持，请先在命令行执行：\npip install pywebview",
+                parent=token_window,
+            )
+            return
+        raw: str | None = None
+        error_message: str | None = None
+        # pywebview 的 GUI 循环会阻塞主线程，先隐藏本工具的所有窗口
+        token_window.withdraw()
+        runtime.root.withdraw()
+        try:
+            raw = browser_login.acquire_credentials()
+        except browser_login.BrowserLoginError as error:
+            error_message = str(error)
+        finally:
+            runtime.root.deiconify()
+            token_window.deiconify()
+            token_window.lift()
+        if error_message:
+            messagebox.showerror("无法打开登录窗口", error_message, parent=token_window)
+            return
+        try:
+            credentials_json = browser_login.format_credential_result(raw)
+        except ValueError as error: # parse_token_input 的 TokenInputError
+            messagebox.showerror("自动登录失败", f"获取到的登录凭据无效：{error}", parent=token_window)
+            return
+        if not credentials_json: # 用户主动关闭了登录窗口或登录超时
+            return
+        token_text.delete("1.0", "end")
+        token_text.insert("1.0", credentials_json)
+        save_token()
+
+    auto_card = ttk.Frame(frame, style="Card.TFrame", padding=scaled(14))
+    auto_card.pack(fill="x", pady=(0, scaled(12)))
+    ttk.Label(auto_card, text="方式一：自动登录（推荐）", style="Heading.TLabel").pack(anchor="w")
+    ttk.Label(
+        auto_card,
+        text="点击下方按钮打开登录窗口，登录平台账号后凭据会自动填入下方并保存，无需手动复制。",
+        style="Caption.TLabel",
+        wraplength=scaled(360),
+        justify="left",
+    ).pack(anchor="w", pady=(scaled(2), scaled(8)))
+    ttk.Button(auto_card, text="打开登录窗口", style=ACCENT_BUTTON_STYLE, command=open_browser_login).pack(anchor="w")
+
     hint_label = ttk.Label(
         frame,
-        text="请先点击左下角 “如何获取？” 查看操作步骤，再把控制台输出的整段 JSON 粘贴到下方。凭据仅保存在本机；留空并保存即可清除。",
+        text="方式二：手动粘贴。点击左下角 “如何获取？” 查看操作步骤，把控制台输出的整段 JSON 粘贴到下方。凭据仅保存在本机；留空并保存即可清除。",
         style="Caption.TLabel",
         wraplength=scaled(360),
         justify="left",

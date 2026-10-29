@@ -19,6 +19,7 @@ dependencies = [
     "sv-ttk>=2.6,<3",
     "pywin32>=306; sys_platform == 'win32'",
 ]
+
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -43,6 +44,9 @@ classifiers = [
     "Topic :: Utilities",
     "Typing :: Typed",
 ]
+
+[project.optional-dependencies]
+browser-login = ["pywebview>=5,<7"]
 
 [project.urls]
 Homepage = "https://github.com/happycola233/tchMaterial-parser"

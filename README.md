@@ -131,6 +131,12 @@ https://basic.smartedu.cn/tchMaterial/detail?contentType=assets_document&content
 >
 > ![提示](./docs/images/get_token.png)
 
+**方式一：自动登录（推荐）**
+
+先在命令行执行 `pip install pywebview` 安装内置浏览器支持，然后点击本工具的 “**设置 Token**” 按钮，再点击 “**打开登录窗口**”，在弹出的窗口中登录平台账号即可——登录成功后凭据会**自动填入并保存**，无需执行下面的手动步骤。
+
+**方式二：手动获取**
+
 1. **打开浏览器**，访问[国家中小学智慧教育平台](https://auth.smartedu.cn/uias/login)并**登录账号**。
 2. 按下 **F12** 或 **Ctrl+Shift+I**，或右键——检查（审查元素）打开**开发者工具**，选择**控制台（Console）**。
 3. 在控制台粘贴以下代码后回车（Enter）：
