@@ -2,14 +2,30 @@
 
 <img src="./assets/logo.png" alt="tchMaterial-parser Logo" width="128" />
 
-# tchMaterial-parser
+# tchMaterial-parser（BY BSLEYE 修改版）
 
-> **BY BSLEYE 修改版**：本仓库基于官方 v4.4 修改，与官方版的区别：
->
-> 1. **内置浏览器自动登录**：执行 `pip install pywebview` 后，点击「设置 Token」→「打开登录窗口」，在弹出的窗口中登录平台账号，凭据自动填入并保存，无需打开控制台复制 JSON。
-> 2. **优化私有 CDN 限流重试**：400 退避重试加长至 2s/5s/10s/20s，课例包等多资源批量下载更稳定。
->
-> 以下为官方原版说明。
+> 本仓库是 [happycola233/tchMaterial-parser](https://github.com/happycola233/tchMaterial-parser) 的修改版，基于官方 v4.4。
+> 原版作者：肥宅水水呀、晨叶梦春及其他贡献者，遵循 MIT 许可证。
+
+## 与官方版的区别
+
+| 改动 | 说明 |
+|------|------|
+| 内置浏览器自动登录 | 点「设置 Token」→「打开登录窗口」，在弹出的窗口登录平台账号，凭据自动填入并保存。无需 F12、无需复制 JSON |
+| 批量下载更稳定 | 私有 CDN 限流 400 的退避重试由 1s/3s 加长至 2s/5s/10s/20s，课例包等多资源下载不再随机失败 |
+
+## 内置登录使用方法
+
+1. 执行 `pip install pywebview` 安装浏览器支持（Windows 使用系统 Edge WebView2，无需另装浏览器）
+2. 打开工具，点击「设置 Token」→「打开登录窗口」
+3. 在弹出的窗口中登录国家中小学智慧教育平台账号
+4. 登录成功后凭据自动填入并保存，约 7 天内无需重复设置
+
+未安装 pywebview 时可继续使用原版的手动粘贴方式，功能不受影响。
+
+---
+
+以下为官方原版说明。
 
 **[国家中小学智慧教育平台](https://basic.smartedu.cn/) [电子课本](https://basic.smartedu.cn/tchMaterial/)下载工具**
 
