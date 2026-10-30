@@ -25,8 +25,10 @@ download_states: list[dict] = [] # 初始化下载状态
 PRIVATE_DOWNLOAD_HOSTS = tuple(f"r{index}-ndr-private.ykt.cbern.com.cn" for index in range(1, 4))
 # 私有 CDN 在短时间连打时会回 400（有时带 InvalidArgument，有时几乎空包）。
 # 立刻换 r2/r3 只会把限流打得更死；同地址稍等再签一次即可。
-_400_RETRY_DELAYS = (1.0, 3.0)
-_MIN_REQUEST_INTERVAL = 0.2
+# 实测课例包（一页 8 个资源）限流可能持续十几秒，1s/3s 两档经常等不到恢复，
+# 加长到 2s/5s/10s/20s 四档退避，且只在同一地址重试，不放大请求量。
+_400_RETRY_DELAYS = (2.0, 5.0, 10.0, 20.0)
+_MIN_REQUEST_INTERVAL = 0.5
 # 批量下载时限制同时占用私有 CDN 的任务数，避免 GUI 一开十几个线程又打出 400。
 _download_slots = threading.BoundedSemaphore(3)
 _rate_lock = threading.Lock()
