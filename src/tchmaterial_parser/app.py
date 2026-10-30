@@ -76,7 +76,7 @@ def main() -> None: # 程序入口：初始化界面并进入主循环
 
     # 界面元素的尺寸另算：macOS 会自行处理 Retina 缩放，故固定取 1
     runtime.ui_scale = 1.0 if os_name == "Darwin" else max(scale, 1.0)
-    root.title(f"国家中小学智慧教育平台 资源下载工具 {__version__}") # 设置窗口标题
+    root.title(f"国家中小学智慧教育平台 资源下载工具 {__version__}（BY BSLEYE 修改版）") # 设置窗口标题
 
     # 应用主题：优先沿用用户上次手动切换的结果，否则跟随系统的浅色/深色模式
     saved_theme = saved_config.get("theme")

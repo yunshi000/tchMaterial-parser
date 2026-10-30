@@ -14,6 +14,7 @@ from .runtime import scaled
 from .widgets import center_window
 
 PROJECT_URL = "https://github.com/happycola233/tchMaterial-parser"
+FORK_URL = "https://github.com/yunshi000/tchMaterial-parser" # 本修改版的仓库地址
 LICENSE_URL = "https://github.com/happycola233/tchMaterial-parser/blob/main/LICENSE"
 FLUENT_EMOJI_LICENSE_URL = "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
 
@@ -84,7 +85,7 @@ def show_about_window() -> None: # 打开关于窗口
     title_frame = ttk.Frame(header)
     title_frame.pack(side="left", fill="x", expand=True)
     ttk.Label(title_frame, text= "国家中小学智慧教育平台 资源下载工具", style="Title.TLabel").pack(anchor="w")
-    ttk.Label(title_frame, text=f"版本 {__version__}", style="Caption.TLabel").pack(anchor="w", pady=(scaled(3), 0))
+    ttk.Label(title_frame, text=f"版本 {__version__} · BY BSLEYE 修改版", style="Caption.TLabel").pack(anchor="w", pady=(scaled(3), 0))
 
     # 作者、项目地址与许可证
     info_card = ttk.Frame(frame, style="Card.TFrame", padding=(scaled(16), scaled(12)))
@@ -112,6 +113,25 @@ def show_about_window() -> None: # 打开关于窗口
     )
     license_link = make_link(info_card, "MIT License", LICENSE_URL, about_window)
     license_link.grid(row=2, column=1, sticky="nw", pady=(scaled(8), 0))
+
+    # 修改版说明：与官方版的区别及内置登录使用方法，便于区分修改版与上游原版
+    fork_card = ttk.Frame(frame, style="Card.TFrame", padding=(scaled(16), scaled(12)))
+    fork_card.pack(fill="x", pady=(scaled(12), 0))
+    ttk.Label(fork_card, text="修改版说明 · BY BSLEYE", style="AboutCardStrong.TLabel").pack(anchor="w")
+    ttk.Label(
+        fork_card,
+        text="本版本基于官方 v4.4 修改，与官方版的区别：\n"
+        "1. 新增内置浏览器自动登录，无需打开控制台复制 JSON。\n"
+        "2. 优化私有 CDN 限流重试，课例包等多资源批量下载更稳定。\n\n"
+        "内置登录使用方法：\n"
+        "先执行 pip install pywebview 安装浏览器支持，然后点击「设置 Token」→「打开登录窗口」，"
+        "在弹出的窗口中登录平台账号；登录成功后凭据自动填入并保存，约 7 天内无需重复设置。",
+        style="AboutCard.TLabel",
+        justify="left",
+        wraplength=scaled(720),
+    ).pack(anchor="w", pady=(scaled(6), 0))
+    fork_link = make_link(fork_card, "修改版仓库 yunshi000/tchMaterial-parser ↗", FORK_URL, about_window)
+    fork_link.pack(anchor="w", pady=(scaled(8), 0))
 
     # 第三方资源与许可证说明
     license_card = ttk.Frame(frame, style="Card.TFrame", padding=(scaled(16), scaled(12)))
